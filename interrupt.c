@@ -51,7 +51,6 @@ __CONFIG(6, WRT0_OFF & WRT1_OFF & WRTC_OFF & WRTB_OFF & WRTD_OFF);
 __CONFIG(7, EBTR0_OFF & EBTR1_OFF & EBTRB_OFF);
 
 //globals
-unsigned char _direction;
 unsigned char _prev_switch; //need to add this for the PIC18 since there is no specific interrupt-on-change NEGATIVE....
 
     /* -------------------LATC-----------------
@@ -67,26 +66,21 @@ void main(void) {
     TRISAbits.TRISA2 = 1;                 //switch input
     ANSELbits.ANS2 = 0;                   //digital for switch
 
-    _direction = LED_RIGHT;               //start from the right to left
     LATC = 0b00001000;                    //start with DS4 lit
 
-    //by using the internal resistors, you can save cost by eleminating an external pull-up/down resistor
+    //by using the internal resistors, you can save cost by eliminating an external pull-up/down resistor
 #ifdef PULL_UPS
     WPUA2 = 1;                          //enable the weak pull-up for the switch
     nRABPU = 0;                         //enable the global weak pull-up bit
     //this bit is active HIGH, meaning it must be cleared for it to be enabled
 #endif
 
-                                        //setup TIMER0 as the delay
-    T0CON = 0b11000111;                 //8bit timer - enable - 1:256 prescaler
-    INTCONbits.TMR0IE = 1;              //enable the TMR0 rollover interrupt
-
     //setup interrupt on change for the switch
     INTCONbits.RABIE = 1;               //enable interrupt on change global
     IOCAbits.IOCA2 = 1;                 //when SW1 is pressed/released, enter the ISR
 
-    RCONbits.IPEN = 0;                  //disable interrupt priorites
-    INTCONbits.GIE = 1;                 //enable global interupts
+    RCONbits.IPEN = 0;                  //disable interrupt priorities
+    INTCONbits.GIE = 1;                 //enable global interrupts
 
 
     while (1) {
@@ -96,31 +90,21 @@ void main(void) {
 
 void interrupt ISR(void) {
 
-    if (INTCONbits.RABIF) {             //SW1 was just pressed
+    if (INTCONbits.RABIF)
+    {             //SW1 was just pressed
         INTCONbits.RABIF = 0;           //must clear the flag in software
         __delay_ms(5);                  //debounce by waiting and seeing if still held down
-        if (SWITCH == DOWN && _prev_switch == UP) {
-            _direction ^= 1;            //change directions
+    
+        if (SWITCH == DOWN && _prev_switch == UP)
+        {
+            //do nothing atm
         }
-        if (SWITCH == DOWN) {
+        
+        if (SWITCH == DOWN)
+        {
             _prev_switch = DOWN;
         } else
             _prev_switch = UP;
     }
-
-    if (INTCONbits.T0IF) {              //TMR1 overflowed
-        INTCONbits.T0IF = 0;            //must clear flag
-        if (_direction == LED_RIGHT) {
-            LATC >> = 1;
-            if (STATUSbits.C == 1)      //when the last LED is lit, restart the pattern
-                LATCbits.LATC3 = 1;
-        } else {
-            LATC << = 1;
-            if (LATCbits.LATC4 == 1)    //when the last LED is lit, restart the pattern
-                LATCbits.LATC0 = 1;
-
-        }
-    }
-
-
+    
 }
