@@ -3759,10 +3759,9 @@ __config("__CONFIG", "pic18", "WRT0_OFF & WRT1_OFF & WRTC_OFF & WRTB_OFF & WRTD_
 __config("__CONFIG", "pic18", "EBTR0_OFF & EBTR1_OFF & EBTRB_OFF");
 
 
-unsigned char _direction;
 unsigned char _prev_switch;
 
-# 63
+# 62
 void main(void) {
 OSCCON = 0b00100010;
 TRISC = 0;
@@ -3770,8 +3769,7 @@ TRISC = 0;
 TRISAbits.TRISA2 = 1;
 ANSELbits.ANS2 = 0;
 
-_direction = 1;
-LATC = 0b00001000;
+LATC = 0b00001001;
 
 
 
@@ -3779,10 +3777,6 @@ WPUA2 = 1;
 nRABPU = 0;
 
 
-
-
-T0CON = 0b11000111;
-INTCONbits.TMR0IE = 1;
 
 
 INTCONbits.RABIE = 1;
@@ -3799,31 +3793,21 @@ continue;
 
 void interrupt ISR(void) {
 
-if (INTCONbits.RABIF) {
+if (INTCONbits.RABIF)
+{
 INTCONbits.RABIF = 0;
 _delay((unsigned long)((5)*(500000/4000.0)));
-if (PORTAbits.RA2 == 0 && _prev_switch == 1) {
-_direction ^= 1;
+
+if (PORTAbits.RA2 == 0 && _prev_switch == 1)
+{
+
 }
-if (PORTAbits.RA2 == 0) {
+
+if (PORTAbits.RA2 == 0)
+{
 _prev_switch = 0;
 } else
 _prev_switch = 1;
 }
-
-if (INTCONbits.T0IF) {
-INTCONbits.T0IF = 0;
-if (_direction == 1) {
-LATC >> = 1;
-if (STATUSbits.C == 1)
-LATCbits.LATC3 = 1;
-} else {
-LATC << = 1;
-if (LATCbits.LATC4 == 1)
-LATCbits.LATC0 = 1;
-
-}
-}
-
 
 }

@@ -60,19 +60,24 @@ unsigned char _prev_switch; //need to add this for the PIC18 since there is no s
      */
 
 void main(void) {
-    OSCCON = 0b00100010;                  //500KHz clock speed
-    TRISC = 0;                            //all LED pins are outputs
+    OSCCON = 0b00100010;  //500KHz clock speed
+    TRISC = 0; //all LED pins are outputs
 
-    TRISAbits.TRISA2 = 1;                 //switch input
-    ANSELbits.ANS2 = 0;                   //digital for switch
-
-    LATC = 0b00001000;                    //start with DS4 lit
-
-    //by using the internal resistors, you can save cost by eliminating an external pull-up/down resistor
+    TRISAbits.TRISA2 = 1; //switch 1 input
+    ANSELbits.ANS2 = 0; //digital for switch
+    
+    TRISAbits.TRISA0 = 1; //switch 2 input
+    ANSELbits.ANS0 = 0; //switch 2 digital
+    
+    LATC = 0b00001001;                    //start with DS4 lit
+    
 #ifdef PULL_UPS
-    WPUA2 = 1;                          //enable the weak pull-up for the switch
-    nRABPU = 0;                         //enable the global weak pull-up bit
+    //by using the internal resistors, you can save cost by eliminating an external pull-up/down resistor
+    WPUA2 = 1; //enable the weak pull-up for the switch
+    WPUA0 = 1; //add pull-up for switch 2
     //this bit is active HIGH, meaning it must be cleared for it to be enabled
+    nRABPU = 0; //enable the global weak pull-up bit
+    
 #endif
 
     //setup interrupt on change for the switch

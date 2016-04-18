@@ -3,9 +3,9 @@
 [d edition pro ]
 [d chip 18F14K22 ]
 [d frameptr 4065 ]
-"63 F:\Dropbox (Personal)\sandbox\PK3\src\pic18\c\pic-buffer/interrupt.c
+"62 F:\Dropbox (Personal)\sandbox\PK3\src\pic18\c\pic-buffer/interrupt.c
 [v _main main `(v  1 e 1 0 ]
-"97
+"96
 [v _ISR ISR `II(v  1 e 1 0 ]
 "62 C:\Program Files (x86)\Microchip\xc8\v1.37\sources\common\float.c
 [v ___ftpack __ftpack `(f  1 e 3 0 ]
@@ -28,8 +28,6 @@
 "15 C:\Program Files (x86)\Microchip\xc8\v1.37\sources\common\Umul32.c
 [v ___lmul __lmul `(ul  1 e 4 0 ]
 "54 F:\Dropbox (Personal)\sandbox\PK3\src\pic18\c\pic-buffer/interrupt.c
-[v __direction _direction `uc  1 e 1 0 ]
-"55
 [v __prev_switch _prev_switch `uc  1 e 1 0 ]
 [s S160 . 1 `uc 1 IOCA 1 0 :6:0 
 ]
@@ -120,41 +118,6 @@
 [v _PORTAbits PORTAbits `VES304  1 e 1 @3968 ]
 "1690
 [v _LATC LATC `VEuc  1 e 1 @3979 ]
-[s S406 . 1 `uc 1 LATC0 1 0 :1:0 
-`uc 1 LATC1 1 0 :1:1 
-`uc 1 LATC2 1 0 :1:2 
-`uc 1 LATC3 1 0 :1:3 
-`uc 1 LATC4 1 0 :1:4 
-`uc 1 LATC5 1 0 :1:5 
-`uc 1 LATC6 1 0 :1:6 
-`uc 1 LATC7 1 0 :1:7 
-]
-"1738
-[s S415 . 1 `uc 1 LC0 1 0 :1:0 
-]
-[s S417 . 1 `uc 1 . 1 0 :1:0 
-`uc 1 LC1 1 0 :1:1 
-]
-[s S420 . 1 `uc 1 . 1 0 :2:0 
-`uc 1 LC2 1 0 :1:2 
-]
-[s S423 . 1 `uc 1 . 1 0 :3:0 
-`uc 1 LC3 1 0 :1:3 
-]
-[s S426 . 1 `uc 1 . 1 0 :4:0 
-`uc 1 LC4 1 0 :1:4 
-]
-[s S429 . 1 `uc 1 . 1 0 :5:0 
-`uc 1 LC5 1 0 :1:5 
-]
-[s S432 . 1 `uc 1 . 1 0 :6:0 
-`uc 1 LC6 1 0 :1:6 
-]
-[s S435 . 1 `uc 1 . 1 0 :7:0 
-`uc 1 LC7 1 0 :1:7 
-]
-[u S438 . 1 `S406 1 . 1 0 `S415 1 . 1 0 `S417 1 . 1 0 `S420 1 . 1 0 `S423 1 . 1 0 `S426 1 . 1 0 `S429 1 . 1 0 `S432 1 . 1 0 `S435 1 . 1 0 ]
-[v _LATCbits LATCbits `VES438  1 e 1 @3979 ]
 [s S23 . 1 `uc 1 TRISA0 1 0 :1:0 
 `uc 1 TRISA1 1 0 :1:1 
 `uc 1 TRISA2 1 0 :1:2 
@@ -208,28 +171,6 @@
 [v _RCONbits RCONbits `VES211  1 e 1 @4048 ]
 "5504
 [v _OSCCON OSCCON `VEuc  1 e 1 @4051 ]
-"5586
-[v _T0CON T0CON `VEuc  1 e 1 @4053 ]
-[s S365 . 1 `uc 1 C 1 0 :1:0 
-`uc 1 DC 1 0 :1:1 
-`uc 1 Z 1 0 :1:2 
-`uc 1 OV 1 0 :1:3 
-`uc 1 N 1 0 :1:4 
-]
-"5702
-[s S371 . 1 `uc 1 CARRY 1 0 :1:0 
-]
-[s S373 . 1 `uc 1 . 1 0 :4:0 
-`uc 1 NEGATIVE 1 0 :1:4 
-]
-[s S376 . 1 `uc 1 . 1 0 :3:0 
-`uc 1 OVERFLOW 1 0 :1:3 
-]
-[s S379 . 1 `uc 1 . 1 0 :2:0 
-`uc 1 ZERO 1 0 :1:2 
-]
-[u S382 . 1 `S365 1 . 1 0 `S371 1 . 1 0 `S373 1 . 1 0 `S376 1 . 1 0 `S379 1 . 1 0 ]
-[v _STATUSbits STATUSbits `VES382  1 e 1 @4056 ]
 [s S104 . 1 `uc 1 RABIF 1 0 :1:0 
 `uc 1 INT0IF 1 0 :1:1 
 `uc 1 TMR0IF 1 0 :1:2 
@@ -258,17 +199,19 @@
 ]
 [u S129 . 1 `S104 1 . 1 0 `S113 1 . 1 0 `S122 1 . 1 0 `S126 1 . 1 0 ]
 [v _INTCONbits INTCONbits `VES129  1 e 1 @4082 ]
+"7511
+[v _WPUA0 WPUA0 `VEb  1 e 0 @31672 ]
 "7515
 [v _WPUA2 WPUA2 `VEb  1 e 0 @31674 ]
 "7555
 [v _nRABPU nRABPU `VEb  1 e 0 @32655 ]
-"63 F:\Dropbox (Personal)\sandbox\PK3\src\pic18\c\pic-buffer/interrupt.c
+"62 F:\Dropbox (Personal)\sandbox\PK3\src\pic18\c\pic-buffer/interrupt.c
 [v _main main `(v  1 e 1 0 ]
 {
-"95
+"94
 } 0
-"97
+"96
 [v _ISR ISR `II(v  1 e 1 0 ]
 {
-"126
+"115
 } 0
