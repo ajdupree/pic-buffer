@@ -1,7 +1,7 @@
 
 
 Microchip Technology PIC18 LITE Macro Assembler V1.37 build -260352376 
-                                                                                               Sun Apr 17 20:27:54 2016
+                                                                                               Sun Apr 17 21:44:13 2016
 
 Microchip Technology Omniscient Code Generator v1.37 (Free mode) build 201603110536
      1                           	processor	18F14K22
@@ -126,8 +126,8 @@ Microchip Technology Omniscient Code Generator v1.37 (Free mode) build 201603110
    120                           ;interrupt.c: 70: ANSELbits.ANS0 = 0;
    121  0000AC  907E               	bcf	3966,0,c	;volatile
    122                           
-   123                           ;interrupt.c: 72: LATC = 0b00001001;
-   124  0000AE  0E09               	movlw	9
+   123                           ;interrupt.c: 72: LATC = 0b00000011;
+   124  0000AE  0E03               	movlw	3
    125  0000B0  6E8B               	movwf	3979,c	;volatile
    126                           
    127                           ;interrupt.c: 76: WPUA2 = 1;
@@ -216,33 +216,33 @@ Microchip Technology Omniscient Code Generator v1.37 (Free mode) build 201603110
    210  000044  D00C               	goto	i2l41
    211                           
    212                           ;interrupt.c: 99: {
-   213                           ;interrupt.c: 100: INTCONbits.RABIF = 0;
+   213                           ;interrupt.c: 101: INTCONbits.RABIF = 0;
    214  000046  90F2               	bcf	intcon,0,c	;volatile
    215                           
-   216                           ;interrupt.c: 101: _delay((unsigned long)((5)*(500000/4000.0)));
+   216                           ;interrupt.c: 102: _delay((unsigned long)((5)*(500000/4000.0)));
    217  000048  0ED0               	movlw	208
    218  00004A                     i2u3_47:
    219  00004A  2EE8               	decfsz	wreg,f,c
    220  00004C  D7FE               	goto	i2u3_47
    221  00004E  F000               	nop	
    222                           
-   223                           ;interrupt.c: 103: if (PORTAbits.RA2 == 0 && _prev_switch == 1)
+   223                           ;interrupt.c: 104: if (PORTAbits.RA2 == 0 && _prev_switch == 1)
    224  000050  5080               	movf	3968,w,c	;volatile
    225                           
-   226                           ;interrupt.c: 106: }
-   227                           ;interrupt.c: 108: if (PORTAbits.RA2 == 0)
+   226                           ;interrupt.c: 107: }
+   227                           ;interrupt.c: 109: if (PORTAbits.RA2 == 0)
    228                           
-   229                           ;interrupt.c: 104: {
+   229                           ;interrupt.c: 105: {
    230  000052  B480               	btfsc	3968,2,c	;volatile
    231  000054  D002               	goto	i2l675
    232                           
-   233                           ;interrupt.c: 109: {
-   234                           ;interrupt.c: 110: _prev_switch = 0;
+   233                           ;interrupt.c: 110: {
+   234                           ;interrupt.c: 111: _prev_switch = 0;
    235  000056  0E00               	movlw	0
    236  000058  D001               	goto	L1
    237  00005A                     i2l675:
    238                           
-   239                           ;interrupt.c: 112: _prev_switch = 1;
+   239                           ;interrupt.c: 113: _prev_switch = 1;
    240  00005A  0E01               	movlw	1
    241  00005C                     L1:
    242  00005C  6E0F               	movwf	__prev_switch,c
@@ -428,7 +428,7 @@ CODE                 0      0       0       0        0.0%
 
 
 Microchip Technology PIC18 Macro Assembler V1.37 build -260352376 
-Symbol Table                                                                                   Sun Apr 17 20:27:54 2016
+Symbol Table                                                                                   Sun Apr 17 21:44:13 2016
 
                      l31 00C0             __CFG_CP0$OFF 000000             __CFG_CP1$OFF 000000  
            __CFG_CPB$OFF 000000             __CFG_CPD$OFF 000000                      _ISR 0008  

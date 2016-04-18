@@ -33,10 +33,10 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _LATC `Vuc ~T0 @X0 0 e@3979 ]
 "7515
 [v _WPUA2 `Vb ~T0 @X0 0 e@31674 ]
+"7511
+[v _WPUA0 `Vb ~T0 @X0 0 e@31672 ]
 "7555
 [v _nRABPU `Vb ~T0 @X0 0 e@32655 ]
-"5586
-[v _T0CON `Vuc ~T0 @X0 0 e@4053 ]
 "6102
 [s S314 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
 [n S314 . RABIF INT0IF TMR0IF RABIE INT0IE TMR0IE PEIE_GIEL GIE_GIEH ]
@@ -130,58 +130,6 @@ Version 3.2 HI-TECH Software Intermediate Code
 [n S42 . . . . . . . . . . . ]
 "1011
 [v _PORTAbits `VS42 ~T0 @X0 0 e@3968 ]
-"5679
-[s S299 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
-[n S299 . C DC Z OV N ]
-"5686
-[s S300 :1 `uc 1 ]
-[n S300 . CARRY ]
-"5689
-[s S301 :4 `uc 1 :1 `uc 1 ]
-[n S301 . . NEGATIVE ]
-"5693
-[s S302 :3 `uc 1 :1 `uc 1 ]
-[n S302 . . OVERFLOW ]
-"5697
-[s S303 :2 `uc 1 :1 `uc 1 ]
-[n S303 . . ZERO ]
-"5678
-[u S298 `S299 1 `S300 1 `S301 1 `S302 1 `S303 1 ]
-[n S298 . . . . . . ]
-"5702
-[v _STATUSbits `VS298 ~T0 @X0 0 e@4056 ]
-"1696
-[s S82 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
-[n S82 . LATC0 LATC1 LATC2 LATC3 LATC4 LATC5 LATC6 LATC7 ]
-"1706
-[s S83 :1 `uc 1 ]
-[n S83 . LC0 ]
-"1709
-[s S84 :1 `uc 1 :1 `uc 1 ]
-[n S84 . . LC1 ]
-"1713
-[s S85 :2 `uc 1 :1 `uc 1 ]
-[n S85 . . LC2 ]
-"1717
-[s S86 :3 `uc 1 :1 `uc 1 ]
-[n S86 . . LC3 ]
-"1721
-[s S87 :4 `uc 1 :1 `uc 1 ]
-[n S87 . . LC4 ]
-"1725
-[s S88 :5 `uc 1 :1 `uc 1 ]
-[n S88 . . LC5 ]
-"1729
-[s S89 :6 `uc 1 :1 `uc 1 ]
-[n S89 . . LC6 ]
-"1733
-[s S90 :7 `uc 1 :1 `uc 1 ]
-[n S90 . . LC7 ]
-"1695
-[u S81 `S82 1 `S83 1 `S84 1 `S85 1 `S86 1 `S87 1 `S88 1 `S89 1 `S90 1 ]
-[n S81 . . . . . . . . . . ]
-"1738
-[v _LATCbits `VS81 ~T0 @X0 0 e@3979 ]
 [; ;htc.h: 26: extern const char __xc8_OPTIM_SPEED;
 [; ;htc.h: 28: extern double __fpnormalize(double);
 [; ;xc8debug.h: 14: extern void __builtin_software_breakpoint(void);
@@ -3006,7 +2954,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [p x EBTR1=OFF ]
 [p x EBTRB=OFF ]
 "54
-[v __direction `uc ~T0 @X0 1 e ]
+[v __prev_switch `uc ~T0 @X0 1 e ]
 [; ;interrupt.c: 45: __config("__CONFIG", "pic18", "FOSC_IRC & PLLEN_OFF & FCMEN_OFF");
 [; ;interrupt.c: 46: __config("__CONFIG", "pic18", "PWRTEN_OFF & BOREN_OFF & WDTEN_OFF");
 [; ;interrupt.c: 47: __config("__CONFIG", "pic18", "HFOFST_OFF & MCLRE_OFF");
@@ -3014,170 +2962,125 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;interrupt.c: 49: __config("__CONFIG", "pic18", "CP0_OFF & CP1_OFF & CPB_OFF & CPD_OFF");
 [; ;interrupt.c: 50: __config("__CONFIG", "pic18", "WRT0_OFF & WRT1_OFF & WRTC_OFF & WRTB_OFF & WRTD_OFF");
 [; ;interrupt.c: 51: __config("__CONFIG", "pic18", "EBTR0_OFF & EBTR1_OFF & EBTRB_OFF");
-[; ;interrupt.c: 54: unsigned char _direction;
-"55
-[v __prev_switch `uc ~T0 @X0 1 e ]
-[; ;interrupt.c: 55: unsigned char _prev_switch;
-"63
+[; ;interrupt.c: 54: unsigned char _prev_switch;
+"62
 [v _main `(v ~T0 @X0 1 ef ]
 {
-[; ;interrupt.c: 63: void main(void) {
+[; ;interrupt.c: 62: void main(void) {
 [e :U _main ]
 [f ]
-[; ;interrupt.c: 64: OSCCON = 0b00100010;
-"64
+[; ;interrupt.c: 63: OSCCON = 0b00100010;
+"63
 [e = _OSCCON -> -> 34 `i `uc ]
-[; ;interrupt.c: 65: TRISC = 0;
-"65
+[; ;interrupt.c: 64: TRISC = 0;
+"64
 [e = _TRISC -> -> 0 `i `uc ]
-[; ;interrupt.c: 67: TRISAbits.TRISA2 = 1;
-"67
+[; ;interrupt.c: 66: TRISAbits.TRISA2 = 1;
+"66
 [e = . . _TRISAbits 0 2 -> -> 1 `i `uc ]
-[; ;interrupt.c: 68: ANSELbits.ANS2 = 0;
-"68
+[; ;interrupt.c: 67: ANSELbits.ANS2 = 0;
+"67
 [e = . . _ANSELbits 1 2 -> -> 0 `i `uc ]
-[; ;interrupt.c: 70: _direction = 1;
+[; ;interrupt.c: 69: TRISAbits.TRISA0 = 1;
+"69
+[e = . . _TRISAbits 0 0 -> -> 1 `i `uc ]
+[; ;interrupt.c: 70: ANSELbits.ANS0 = 0;
 "70
-[e = __direction -> -> 1 `i `uc ]
-[; ;interrupt.c: 71: LATC = 0b00001000;
-"71
-[e = _LATC -> -> 8 `i `uc ]
-[; ;interrupt.c: 75: WPUA2 = 1;
-"75
-[e = _WPUA2 -> -> 1 `i `b ]
-[; ;interrupt.c: 76: nRABPU = 0;
+[e = . . _ANSELbits 1 0 -> -> 0 `i `uc ]
+[; ;interrupt.c: 72: LATC = 0b00000011;
+"72
+[e = _LATC -> -> 3 `i `uc ]
+[; ;interrupt.c: 76: WPUA2 = 1;
 "76
+[e = _WPUA2 -> -> 1 `i `b ]
+[; ;interrupt.c: 77: WPUA0 = 1;
+"77
+[e = _WPUA0 -> -> 1 `i `b ]
+[; ;interrupt.c: 79: nRABPU = 0;
+"79
 [e = _nRABPU -> -> 0 `i `b ]
-[; ;interrupt.c: 81: T0CON = 0b11000111;
-"81
-[e = _T0CON -> -> 199 `i `uc ]
-[; ;interrupt.c: 82: INTCONbits.TMR0IE = 1;
-"82
-[e = . . _INTCONbits 0 5 -> -> 1 `i `uc ]
-[; ;interrupt.c: 85: INTCONbits.RABIE = 1;
-"85
+[; ;interrupt.c: 84: INTCONbits.RABIE = 1;
+"84
 [e = . . _INTCONbits 0 3 -> -> 1 `i `uc ]
-[; ;interrupt.c: 86: IOCAbits.IOCA2 = 1;
-"86
+[; ;interrupt.c: 85: IOCAbits.IOCA2 = 1;
+"85
 [e = . . _IOCAbits 1 2 -> -> 1 `i `uc ]
-[; ;interrupt.c: 88: RCONbits.IPEN = 0;
-"88
+[; ;interrupt.c: 87: RCONbits.IPEN = 0;
+"87
 [e = . . _RCONbits 5 7 -> -> 0 `i `uc ]
-[; ;interrupt.c: 89: INTCONbits.GIE = 1;
-"89
+[; ;interrupt.c: 88: INTCONbits.GIE = 1;
+"88
 [e = . . _INTCONbits 1 7 -> -> 1 `i `uc ]
-[; ;interrupt.c: 92: while (1) {
-"92
+[; ;interrupt.c: 91: while (1) {
+"91
 [e :U 323 ]
 {
-[; ;interrupt.c: 93: continue;
-"93
+[; ;interrupt.c: 92: continue;
+"92
 [e $U 322  ]
-"94
+"93
 }
 [e :U 322 ]
-"92
+"91
 [e $U 323  ]
 [e :U 324 ]
+[; ;interrupt.c: 93: }
 [; ;interrupt.c: 94: }
-[; ;interrupt.c: 95: }
-"95
+"94
 [e :UE 321 ]
 }
-[v F2966 `(v ~T0 @X0 1 tf ]
-"97
-[v _ISR `IF2966 ~T0 @X0 1 e ]
+[v F2965 `(v ~T0 @X0 1 tf ]
+"96
+[v _ISR `IF2965 ~T0 @X0 1 e ]
 {
-[; ;interrupt.c: 97: void interrupt ISR(void) {
+[; ;interrupt.c: 96: void interrupt ISR(void) {
 [e :U _ISR ]
 [f ]
-[; ;interrupt.c: 99: if (INTCONbits.RABIF) {
-"99
+[; ;interrupt.c: 98: if (INTCONbits.RABIF)
+"98
 [e $ ! != -> . . _INTCONbits 0 0 `i -> -> -> 0 `i `Vuc `i 326  ]
+[; ;interrupt.c: 99: {
+"99
 {
-[; ;interrupt.c: 100: INTCONbits.RABIF = 0;
-"100
-[e = . . _INTCONbits 0 0 -> -> 0 `i `uc ]
-[; ;interrupt.c: 101: _delay((unsigned long)((5)*(500000/4000.0)));
+[; ;interrupt.c: 101: INTCONbits.RABIF = 0;
 "101
-[e ( __delay (1 -> * -> -> 5 `i `d / -> -> 500000 `l `d .4000.0 `ul ]
-[; ;interrupt.c: 102: if (PORTAbits.RA2 == 0 && _prev_switch == 1) {
+[e = . . _INTCONbits 0 0 -> -> 0 `i `uc ]
+[; ;interrupt.c: 102: _delay((unsigned long)((5)*(500000/4000.0)));
 "102
-[e $ ! && == -> . . _PORTAbits 0 2 `i -> 0 `i == -> __prev_switch `i -> 1 `i 327  ]
-{
-[; ;interrupt.c: 103: _direction ^= 1;
-"103
-[e =^ __direction -> -> 1 `i `uc ]
+[e ( __delay (1 -> * -> -> 5 `i `d / -> -> 500000 `l `d .4000.0 `ul ]
+[; ;interrupt.c: 104: if (PORTAbits.RA2 == 0 && _prev_switch == 1)
 "104
-}
-[e :U 327 ]
-[; ;interrupt.c: 104: }
-[; ;interrupt.c: 105: if (PORTAbits.RA2 == 0) {
+[e $ ! && == -> . . _PORTAbits 0 2 `i -> 0 `i == -> __prev_switch `i -> 1 `i 327  ]
+[; ;interrupt.c: 105: {
 "105
-[e $ ! == -> . . _PORTAbits 0 2 `i -> 0 `i 328  ]
 {
-[; ;interrupt.c: 106: _prev_switch = 0;
-"106
-[e = __prev_switch -> -> 0 `i `uc ]
 "107
 }
-[; ;interrupt.c: 107: } else
+[e :U 327 ]
+[; ;interrupt.c: 107: }
+[; ;interrupt.c: 109: if (PORTAbits.RA2 == 0)
+"109
+[e $ ! == -> . . _PORTAbits 0 2 `i -> 0 `i 328  ]
+[; ;interrupt.c: 110: {
+"110
+{
+[; ;interrupt.c: 111: _prev_switch = 0;
+"111
+[e = __prev_switch -> -> 0 `i `uc ]
+"112
+}
+[; ;interrupt.c: 112: } else
 [e $U 329  ]
 [e :U 328 ]
-[; ;interrupt.c: 108: _prev_switch = 1;
-"108
+[; ;interrupt.c: 113: _prev_switch = 1;
+"113
 [e = __prev_switch -> -> 1 `i `uc ]
 [e :U 329 ]
-"109
+"114
 }
 [e :U 326 ]
-[; ;interrupt.c: 109: }
-[; ;interrupt.c: 111: if (INTCONbits.T0IF) {
-"111
-[e $ ! != -> . . _INTCONbits 1 2 `i -> -> -> 0 `i `Vuc `i 330  ]
-{
-[; ;interrupt.c: 112: INTCONbits.T0IF = 0;
-"112
-[e = . . _INTCONbits 1 2 -> -> 0 `i `uc ]
-[; ;interrupt.c: 113: if (_direction == 1) {
-"113
-[e $ ! == -> __direction `i -> 1 `i 331  ]
-{
-[; ;interrupt.c: 114: LATC >> = 1;
-"114
-[e =>> _LATC -> 1 `i ]
-[; ;interrupt.c: 115: if (STATUSbits.C == 1)
-"115
-[e $ ! == -> . . _STATUSbits 0 0 `i -> 1 `i 332  ]
-[; ;interrupt.c: 116: LATCbits.LATC3 = 1;
+[; ;interrupt.c: 114: }
+[; ;interrupt.c: 116: }
 "116
-[e = . . _LATCbits 0 3 -> -> 1 `i `uc ]
-[e :U 332 ]
-"117
-}
-[; ;interrupt.c: 117: } else {
-[e $U 333  ]
-[e :U 331 ]
-{
-[; ;interrupt.c: 118: LATC << = 1;
-"118
-[e =<< _LATC -> 1 `i ]
-[; ;interrupt.c: 119: if (LATCbits.LATC4 == 1)
-"119
-[e $ ! == -> . . _LATCbits 0 4 `i -> 1 `i 334  ]
-[; ;interrupt.c: 120: LATCbits.LATC0 = 1;
-"120
-[e = . . _LATCbits 0 0 -> -> 1 `i `uc ]
-[e :U 334 ]
-"122
-}
-[e :U 333 ]
-"123
-}
-[e :U 330 ]
-[; ;interrupt.c: 122: }
-[; ;interrupt.c: 123: }
-[; ;interrupt.c: 126: }
-"126
 [e :UE 325 ]
 }

@@ -69,7 +69,7 @@ void main(void) {
     TRISAbits.TRISA0 = 1; //switch 2 input
     ANSELbits.ANS0 = 0; //switch 2 digital
     
-    LATC = 0b00001001;                    //start with DS4 lit
+    LATC = 0b00000011; //start with DS4 lit
     
 #ifdef PULL_UPS
     //by using the internal resistors, you can save cost by eliminating an external pull-up/down resistor
@@ -81,11 +81,11 @@ void main(void) {
 #endif
 
     //setup interrupt on change for the switch
-    INTCONbits.RABIE = 1;               //enable interrupt on change global
-    IOCAbits.IOCA2 = 1;                 //when SW1 is pressed/released, enter the ISR
+    INTCONbits.RABIE = 1; //enable interrupt on change global
+    IOCAbits.IOCA2 = 1; //when SW1 is pressed/released, enter the ISR
 
-    RCONbits.IPEN = 0;                  //disable interrupt priorities
-    INTCONbits.GIE = 1;                 //enable global interrupts
+    RCONbits.IPEN = 0; //disable interrupt priorities
+    INTCONbits.GIE = 1; //enable global interrupts
 
 
     while (1) {
@@ -96,9 +96,10 @@ void main(void) {
 void interrupt ISR(void) {
 
     if (INTCONbits.RABIF)
-    {             //SW1 was just pressed
-        INTCONbits.RABIF = 0;           //must clear the flag in software
-        __delay_ms(5);                  //debounce by waiting and seeing if still held down
+    {
+        //SW1 was just pressed
+        INTCONbits.RABIF = 0; //must clear the flag in software
+        __delay_ms(5); //debounce by waiting and seeing if still held down
     
         if (SWITCH == DOWN && _prev_switch == UP)
         {

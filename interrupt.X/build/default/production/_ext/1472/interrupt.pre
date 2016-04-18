@@ -3769,11 +3769,16 @@ TRISC = 0;
 TRISAbits.TRISA2 = 1;
 ANSELbits.ANS2 = 0;
 
-LATC = 0b00001001;
+TRISAbits.TRISA0 = 1;
+ANSELbits.ANS0 = 0;
+
+LATC = 0b00000011;
 
 
 
 WPUA2 = 1;
+WPUA0 = 1;
+
 nRABPU = 0;
 
 
@@ -3795,6 +3800,7 @@ void interrupt ISR(void) {
 
 if (INTCONbits.RABIF)
 {
+
 INTCONbits.RABIF = 0;
 _delay((unsigned long)((5)*(500000/4000.0)));
 

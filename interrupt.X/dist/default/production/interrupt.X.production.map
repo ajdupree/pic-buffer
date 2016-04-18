@@ -5,7 +5,7 @@ Linker command line:
 -W-3 --edf=C:\Program Files (x86)\Microchip\xc8\v1.37\dat\en_msgs.txt -cs \
   -h+dist/default/production\interrupt.X.production.sym \
   --cmf=dist/default/production\interrupt.X.production.cmf -z -Q18F14K22 \
-  -oC:\Users\Andrew\AppData\Local\Temp\s8d4.2 \
+  -oC:\Users\Andrew\AppData\Local\Temp\sbik.2 \
   -Mdist/default/production/interrupt.X.production.map -E1 -ver=XC8 \
   -ASTACK=060h-01ffh -pstack=STACK -ACODE=00h-03FFFh -ACONST=00h-03FFFh \
   -ASMALLCONST=0200h-02FFhx62 -AMEDIUMCONST=0200h-03FFFh -ACOMRAM=01h-05Fh \
@@ -20,7 +20,7 @@ Linker command line:
   -pfarbss=FARRAM,fardata=FARRAM,nvFARRAM=FARRAM \
   -pintsave_regs=BIGRAM,bigbss=BIGRAM,bigdata=BIGRAM -pbss=RAM \
   -pidata=CODE,irdata=CODE,ibigdata=CODE,ifardata=CODE -prparam=COMRAM \
-  C:\Users\Andrew\AppData\Local\Temp\s8d4.obj \
+  C:\Users\Andrew\AppData\Local\Temp\sbik.obj \
   dist/default/production\interrupt.X.production.obj 
 
 Object code version is 3.11
@@ -33,7 +33,7 @@ Call graph: (short form)
 
 
                 Name                               Link     Load   Length Selector   Space Scale
-C:\Users\Andrew\AppData\Local\Temp\s8d4.obj
+C:\Users\Andrew\AppData\Local\Temp\sbik.obj
                 end_init                             9A       9A        4        4       0
                 reset_vec                             0        0        4        0       0
                 idloc                            200000   200000        8   200000       0
