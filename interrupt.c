@@ -29,12 +29,16 @@
  */
 
 #include <htc.h>                         //PIC hardware mapping
+#include <stdio.h>
+#include <stdlib.h>
+
 #define _XTAL_FREQ 500000                //Used by the compiler for the delay_ms(x) macro
 
 #define DOWN                0
 #define UP                  1
 
 #define SWITCH              PORTAbits.RA2
+#define SWITCH2             PORTAbits.RA0;
 
 #define LED_RIGHT           1
 #define LED_LEFT            0
@@ -69,7 +73,7 @@ void main(void) {
     TRISAbits.TRISA0 = 1; //switch 2 input
     ANSELbits.ANS0 = 0; //switch 2 digital
     
-    LATC = 0b00000011; //start with DS4 lit
+    LATC = 0b00001111; 
     
 #ifdef PULL_UPS
     //by using the internal resistors, you can save cost by eliminating an external pull-up/down resistor
@@ -93,17 +97,19 @@ void main(void) {
     }
 }
 
-void interrupt ISR(void) {
-
+void interrupt ISR(void) 
+{
     if (INTCONbits.RABIF)
     {
         //SW1 was just pressed
         INTCONbits.RABIF = 0; //must clear the flag in software
-        __delay_ms(5); //debounce by waiting and seeing if still held down
-    
+        __delay_ms(5); //debounce by waiting and seeing if still held down        
+        
+        //LATCbits.LATC0 = PORTAbits.RA0;        
+                 
         if (SWITCH == DOWN && _prev_switch == UP)
         {
-            //do nothing atm
+             //falling edge only
         }
         
         if (SWITCH == DOWN)
