@@ -1,5 +1,5 @@
 
-# 1 "../interrupt.c"
+# 1 "../picbuffer.c"
 
 # 26 "C:\Program Files (x86)\Microchip\xc8\v1.37\include\htc.h"
 extern const char __xc8_OPTIM_SPEED;
@@ -3749,7 +3749,7 @@ extern __nonreentrant void _delaywdt(unsigned long);
 #pragma intrinsic(_delay3)
 extern __nonreentrant void _delay3(unsigned char);
 
-# 45 "../interrupt.c"
+# 35 "../picbuffer.c"
 __config("__CONFIG", "pic18", "FOSC_IRC & PLLEN_OFF & FCMEN_OFF");
 __config("__CONFIG", "pic18", "PWRTEN_OFF & BOREN_OFF & WDTEN_OFF");
 __config("__CONFIG", "pic18", "HFOFST_OFF & MCLRE_OFF");
@@ -3759,61 +3759,120 @@ __config("__CONFIG", "pic18", "WRT0_OFF & WRT1_OFF & WRTC_OFF & WRTB_OFF & WRTD_
 __config("__CONFIG", "pic18", "EBTR0_OFF & EBTR1_OFF & EBTRB_OFF");
 
 
-unsigned char _prev_switch;
+unsigned char prev_switch_state;
+unsigned char prev_switch_state_2;
+int pushIndex, popIndex;
+unsigned char buffer[4] = {0,0,0,0};
 
-# 62
+# 56
+void push();
+void pop();
+int next();
+
+
+
+
+int next()
+{
+if (pushIndex < 4-1) return pushIndex+1;
+else return 0;
+}
+
+
+void push()
+{
+buffer[pushIndex] = 1;
+
+
+if(pushIndex == popIndex && buffer[next()] != 0)
+{
+popIndex++;
+}
+
+
+pushIndex++;
+
+
+if(pushIndex == 4) pushIndex = 0;
+if(popIndex == 4) popIndex = 0;
+}
+
+
+void pop()
+{
+if (buffer[popIndex] == 0)
+{
+
+return;
+}
+else
+{
+buffer[popIndex]=0;
+popIndex++;
+if(popIndex == 4) popIndex=0;
+}
+}
+
+
+void output()
+{
+LATCbits.LATC0 = buffer[0];
+LATCbits.LATC1 = buffer[1];
+LATCbits.LATC2 = buffer[2];
+LATCbits.LATC3 = buffer[3];
+}
+
 void main(void) {
 OSCCON = 0b00100010;
 TRISC = 0;
-
 TRISAbits.TRISA2 = 1;
 ANSELbits.ANS2 = 0;
 
-TRISAbits.TRISA0 = 1;
-ANSELbits.ANS0 = 0;
 
-LATC = 0b00000011;
+LATC = 0b00000000;
 
 
 
 WPUA2 = 1;
-WPUA0 = 1;
 
 nRABPU = 0;
 
 
 
-
 INTCONbits.RABIE = 1;
 IOCAbits.IOCA2 = 1;
+IOCAbits.IOCA3 = 1;
 
 RCONbits.IPEN = 0;
 INTCONbits.GIE = 1;
 
-
-while (1) {
+while (1)
+{
 continue;
 }
 }
 
-void interrupt ISR(void) {
-
-if (INTCONbits.RABIF)
+void interrupt ISR(void)
 {
+
 
 INTCONbits.RABIF = 0;
+
 _delay((unsigned long)((5)*(500000/4000.0)));
 
-if (PORTAbits.RA2 == 0 && _prev_switch == 1)
-{
+# 157
+if (PORTAbits.RA2 == 0 && prev_switch_state == 1) pop();
 
-}
+if (PORTAbits.RA2 == 0) prev_switch_state = 0;
+else prev_switch_state = 1;
 
-if (PORTAbits.RA2 == 0)
-{
-_prev_switch = 0;
-} else
-_prev_switch = 1;
-}
 
+
+if(PORTAbits.RA3 == 0 && prev_switch_state_2 == 1) push();
+
+if(PORTAbits.RA3) prev_switch_state_2 = 1;
+else prev_switch_state_2 = 0;
+
+
+output();
 }

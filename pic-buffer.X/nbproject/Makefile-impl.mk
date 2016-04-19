@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=interrupt.X
+PROJECTNAME=pic-buffer.X
 
 # Active Configuration
 DEFAULTCONF=default
