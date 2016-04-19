@@ -38,7 +38,6 @@
 #define UP                  1
 
 #define SWITCH              PORTAbits.RA2
-#define SWITCH2             PORTAbits.RA0;
 
 #define LED_RIGHT           1
 #define LED_LEFT            0
@@ -56,6 +55,7 @@ __CONFIG(7, EBTR0_OFF & EBTR1_OFF & EBTRB_OFF);
 
 //globals
 unsigned char _prev_switch; //need to add this for the PIC18 since there is no specific interrupt-on-change NEGATIVE....
+unsigned char prev2;
 
     /* -------------------LATC-----------------
      * Bit#:  -7---6---5---4---3---2---1---0---
@@ -66,27 +66,25 @@ unsigned char _prev_switch; //need to add this for the PIC18 since there is no s
 void main(void) {
     OSCCON = 0b00100010;  //500KHz clock speed
     TRISC = 0; //all LED pins are outputs
-
+   
     TRISAbits.TRISA2 = 1; //switch 1 input
-    ANSELbits.ANS2 = 0; //digital for switch
-    
-    TRISAbits.TRISA0 = 1; //switch 2 input
-    ANSELbits.ANS0 = 0; //switch 2 digital
-    
-    LATC = 0b00001111; 
+    ANSELbits.ANS2 = 0; //digital for switch   
+        
+    LATC = 0b00000000; 
     
 #ifdef PULL_UPS
     //by using the internal resistors, you can save cost by eliminating an external pull-up/down resistor
     WPUA2 = 1; //enable the weak pull-up for the switch
-    WPUA0 = 1; //add pull-up for switch 2
+
+     
     //this bit is active HIGH, meaning it must be cleared for it to be enabled
-    nRABPU = 0; //enable the global weak pull-up bit
-    
+    nRABPU = 0; //enable the global weak pull-up bit    
 #endif
 
     //setup interrupt on change for the switch
     INTCONbits.RABIE = 1; //enable interrupt on change global
     IOCAbits.IOCA2 = 1; //when SW1 is pressed/released, enter the ISR
+    IOCAbits.IOCA3 = 1; 
 
     RCONbits.IPEN = 0; //disable interrupt priorities
     INTCONbits.GIE = 1; //enable global interrupts
@@ -105,18 +103,31 @@ void interrupt ISR(void)
         INTCONbits.RABIF = 0; //must clear the flag in software
         __delay_ms(5); //debounce by waiting and seeing if still held down        
         
-        //LATCbits.LATC0 = PORTAbits.RA0;        
-                 
+        //LATCbits.LATC0 = PORTAbits.RA0;  
+        
+         //switch1        
         if (SWITCH == DOWN && _prev_switch == UP)
         {
              //falling edge only
-        }
-        
+            LATCbits.LATC0 = ~LATCbits.LATC0;            
+        }        
         if (SWITCH == DOWN)
         {
             _prev_switch = DOWN;
-        } else
+        } 
+        else 
+        {
             _prev_switch = UP;
+        }
+        
+        if(PORTAbits.RA3 == DOWN && prev2 == UP)
+        {
+            LATCbits.LATC1 = ~LATCbits.LATC1;            
+        }
+        if(PORTAbits.RA3) prev2 = UP;
+        else prev2 = DOWN;
+            
+        
+        
     }
-    
 }
