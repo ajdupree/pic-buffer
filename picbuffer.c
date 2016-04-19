@@ -1,20 +1,11 @@
 /**
  *******************************************************************
- *  Lesson 10 - "Interrupts and Pull-ups"
- *
- *  This lesson will introduce interrupts and how they are useful. It will
- *  also introduce internal weak pull-ups that are available on most PICs.
- *
- *  It should be noted that this lesson is more efficent than the last
- *  one, "Timer0". Notice how the processor is no longer waiting for
- *  Timer0 to roll over. Instead, we let the hardware modules do the work,
- *  freeing the CPU to do other things in the main loop
- *
- *  The switch is no longer continuously polled for a button press. Instead,
- *  an interrupt will occur which will automically place the program counter
- *  inside of the ISR where we can change directions outisde of normal code execution
- *
- *  LEDs rotate at a constant speed and the switch reverses their direction
+ *  PICKit 3 Starter Kit Circular Buffer implementation
+ * 
+ * Loosely based on sample code #10 - interrupts 
+ * Requires one momentary pushbutton external to the starter kit.
+ * This button should connect RA3 and GND, and connect RA3 to ground when
+ * the button is pushed.
  *
  *  PIC: 18F14K22
  *  Compiler: XC8 v1.00
