@@ -29,13 +29,12 @@
  */
 
 #include <htc.h>                         //PIC hardware mapping
-#include <stdio.h>
-#include <stdlib.h>
 
 #define _XTAL_FREQ 500000                //Used by the compiler for the delay_ms(x) macro
 #define DOWN                0
 #define UP                  1
 #define SWITCH              PORTAbits.RA2
+#define SWITCH2             PORTAbits.RA3
 #define LED_RIGHT           1
 #define LED_LEFT            0
 #define PULL_UPS  //if this is uncommented, the trace under JP5 can be cut with no ill effects
@@ -50,9 +49,9 @@ __CONFIG(5, CP0_OFF & CP1_OFF & CPB_OFF & CPD_OFF);
 __CONFIG(6, WRT0_OFF & WRT1_OFF & WRTC_OFF & WRTB_OFF & WRTD_OFF);
 __CONFIG(7, EBTR0_OFF & EBTR1_OFF & EBTRB_OFF);
 
-//globals
-unsigned char _prev_switch; //need to add this for the PIC18 since there is no specific interrupt-on-change NEGATIVE....
-unsigned char prev2;
+/*globals*/
+unsigned char prev_switch_state; //need to add this for the PIC18 since there is no specific interrupt-on-change NEGATIVE....
+unsigned char prev_switch_state_2;
 int pushIndex, popIndex;
 unsigned char buffer[SIZE] = {0,0,0,0};
 
@@ -62,18 +61,21 @@ unsigned char buffer[SIZE] = {0,0,0,0};
      *-----------------------------------------
      */
 
-//function prototypes
+/*function prototypes*/
 void push();
 void pop();
 int next();
 
-//functions
+/*functions*/
+
+//track where the next push should go
 int next()
 {
 	if (pushIndex < SIZE-1) return pushIndex+1;
 	else return 0;
 }
 
+//push function - add data to next open spot in the buffer
 void push()
 {
 	buffer[pushIndex] = UP;
@@ -92,22 +94,23 @@ void push()
 	if(popIndex == SIZE) popIndex = 0;
 }
 
+//pop function - remove oldest item from buffer
 void pop()
 {
 	if (buffer[popIndex] == 0)
 	{
-		printf("Buffer empty.\n");
+        //do nothing
 		return;
 	}
 	else
 	{
-		printf("Popped: %d\n", buffer[popIndex]);
 		buffer[popIndex]=DOWN;
 		popIndex++;
 		if(popIndex == SIZE) popIndex=0;
 	}
 }
 
+//map the buffer state to the LED array
 void output()
 {
     LATCbits.LATC0 = buffer[0];
@@ -118,11 +121,11 @@ void output()
 
 void main(void) {
     OSCCON = 0b00100010;  //500KHz clock speed
-    TRISC = 0; //all LED pins are outputs
-   
+    TRISC = 0; //all LED pins are outputs   
     TRISAbits.TRISA2 = 1; //switch 1 input
     ANSELbits.ANS2 = 0; //digital for switch   
         
+    //initialize LED array to all off
     LATC = 0b00000000; 
     
 #ifdef PULL_UPS
@@ -135,50 +138,43 @@ void main(void) {
     //setup interrupt on change for the switch
     INTCONbits.RABIE = 1; //enable interrupt on change global
     IOCAbits.IOCA2 = 1; //when SW1 is pressed/released, enter the ISR
-    IOCAbits.IOCA3 = 1; 
+    IOCAbits.IOCA3 = 1; //when SW2 is pressed/release, enter the ISR too 
 
     RCONbits.IPEN = 0; //disable interrupt priorities
     INTCONbits.GIE = 1; //enable global interrupts
-
-
-    while (1) {
+    
+    while (1)
+    {
         continue; //can spend rest of time doing something critical here
     }
 }
 
 void interrupt ISR(void) 
 {
-    if (INTCONbits.RABIF)
-    {
-        //SW1 was just pressed
-        INTCONbits.RABIF = 0; //must clear the flag in software
-        __delay_ms(5); //debounce by waiting and seeing if still held down        
-        
-        //LATCbits.LATC0 = PORTAbits.RA0;  
-        
-         //switch1        
-        if (SWITCH == DOWN && _prev_switch == UP)
-        {
-             //falling edge only
-            pop();            
-        }        
-        if (SWITCH == DOWN)
-        {
-            _prev_switch = DOWN;
-        } 
-        else 
-        {
-            _prev_switch = UP;
-        }
-        
-        if(PORTAbits.RA3 == DOWN && prev2 == UP)
-        {
-           push();           
-        }
-        if(PORTAbits.RA3) prev2 = UP;
-        else prev2 = DOWN;
-        
-        output();
-        
-    }
+    //if we're here, one of the switches was pressed    
+    //must clear the flag in software
+    INTCONbits.RABIF = 0; 
+    //debounce by waiting and seeing if still held down  
+    __delay_ms(5);       
+
+    /*
+     * figure out which switch was pressed by comparing current/prev states 
+     */
+    
+    //switch1       
+    //on falling edge, take action
+    if (SWITCH == DOWN && prev_switch_state == UP) pop();                    
+    //track previous state
+    if (SWITCH == DOWN) prev_switch_state = DOWN;
+    else prev_switch_state = UP;
+
+    //switch2
+    //on falling edge, take action
+    if(SWITCH2 == DOWN && prev_switch_state_2 == UP) push();           
+    //track previous state
+    if(SWITCH2) prev_switch_state_2 = UP;
+    else prev_switch_state_2 = DOWN;
+
+    //update the LED array with buffer state
+    output();            
 }
