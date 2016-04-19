@@ -54,8 +54,7 @@ __CONFIG(7, EBTR0_OFF & EBTR1_OFF & EBTRB_OFF);
 unsigned char _prev_switch; //need to add this for the PIC18 since there is no specific interrupt-on-change NEGATIVE....
 unsigned char prev2;
 int pushIndex, popIndex;
-int num = 1;
-int buffer[SIZE] = {0,0,0,0};
+unsigned char buffer[SIZE] = {0,0,0,0};
 
     /* -------------------LATC-----------------
      * Bit#:  -7---6---5---4---3---2---1---0---
@@ -77,8 +76,7 @@ int next()
 
 void push()
 {
-	buffer[pushIndex] = num;
-	num++;
+	buffer[pushIndex] = UP;
 
 	//decide to increment the popIndex or not
 	if(pushIndex == popIndex && buffer[next()] != 0)
@@ -104,10 +102,18 @@ void pop()
 	else
 	{
 		printf("Popped: %d\n", buffer[popIndex]);
-		buffer[popIndex]=0;
+		buffer[popIndex]=DOWN;
 		popIndex++;
 		if(popIndex == SIZE) popIndex=0;
 	}
+}
+
+void output()
+{
+    LATCbits.LATC0 = buffer[0];
+    LATCbits.LATC1 = buffer[1];
+    LATCbits.LATC2 = buffer[2];
+    LATCbits.LATC3 = buffer[3];    
 }
 
 void main(void) {
@@ -121,9 +127,7 @@ void main(void) {
     
 #ifdef PULL_UPS
     //by using the internal resistors, you can save cost by eliminating an external pull-up/down resistor
-    WPUA2 = 1; //enable the weak pull-up for the switch
-
-     
+    WPUA2 = 1; //enable the weak pull-up for the switch     
     //this bit is active HIGH, meaning it must be cleared for it to be enabled
     nRABPU = 0; //enable the global weak pull-up bit    
 #endif
@@ -156,7 +160,7 @@ void interrupt ISR(void)
         if (SWITCH == DOWN && _prev_switch == UP)
         {
              //falling edge only
-            LATCbits.LATC0 = ~LATCbits.LATC0;            
+            pop();            
         }        
         if (SWITCH == DOWN)
         {
@@ -169,12 +173,12 @@ void interrupt ISR(void)
         
         if(PORTAbits.RA3 == DOWN && prev2 == UP)
         {
-            LATCbits.LATC1 = ~LATCbits.LATC1;            
+           push();           
         }
         if(PORTAbits.RA3) prev2 = UP;
         else prev2 = DOWN;
-            
         
+        output();
         
     }
 }
