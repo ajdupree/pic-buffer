@@ -33,16 +33,13 @@
 #include <stdlib.h>
 
 #define _XTAL_FREQ 500000                //Used by the compiler for the delay_ms(x) macro
-
 #define DOWN                0
 #define UP                  1
-
 #define SWITCH              PORTAbits.RA2
-
 #define LED_RIGHT           1
 #define LED_LEFT            0
-
 #define PULL_UPS  //if this is uncommented, the trace under JP5 can be cut with no ill effects
+#define SIZE 4
 
 //config bits that are part-specific for the PIC18F14K22
 __CONFIG(1, FOSC_IRC & PLLEN_OFF & FCMEN_OFF);
@@ -56,12 +53,62 @@ __CONFIG(7, EBTR0_OFF & EBTR1_OFF & EBTRB_OFF);
 //globals
 unsigned char _prev_switch; //need to add this for the PIC18 since there is no specific interrupt-on-change NEGATIVE....
 unsigned char prev2;
+int pushIndex, popIndex;
+int num = 1;
+int buffer[SIZE] = {0,0,0,0};
 
     /* -------------------LATC-----------------
      * Bit#:  -7---6---5---4---3---2---1---0---
      * LED:   ---------------|DS4|DS3|DS2|DS1|-
      *-----------------------------------------
      */
+
+//function prototypes
+void push();
+void pop();
+int next();
+
+//functions
+int next()
+{
+	if (pushIndex < SIZE-1) return pushIndex+1;
+	else return 0;
+}
+
+void push()
+{
+	buffer[pushIndex] = num;
+	num++;
+
+	//decide to increment the popIndex or not
+	if(pushIndex == popIndex && buffer[next()] != 0)
+	{
+		popIndex++;
+	}
+
+	//always increment push index
+	pushIndex++;
+
+	//reset indices if necessary
+	if(pushIndex == SIZE) pushIndex = 0;
+	if(popIndex == SIZE) popIndex = 0;
+}
+
+void pop()
+{
+	if (buffer[popIndex] == 0)
+	{
+		printf("Buffer empty.\n");
+		return;
+	}
+	else
+	{
+		printf("Popped: %d\n", buffer[popIndex]);
+		buffer[popIndex]=0;
+		popIndex++;
+		if(popIndex == SIZE) popIndex=0;
+	}
+}
 
 void main(void) {
     OSCCON = 0b00100010;  //500KHz clock speed
